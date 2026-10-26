@@ -648,14 +648,19 @@
     console.error("API Error:", error);
     throw error;
   }
+} // <- Tanda kurung tutup ini sangat penting untuk menutup fungsi callApi secara utuh
 
-        passInput.type = 'text';
-        btn.textContent = '🙈 Sembunyi';
-      } else {
-        passInput.type = 'password';
-        btn.textContent = '👁️ Lihat';
-      }
-    }
+function togglePasswordVisibility() {
+  let passInput = document.getElementById('loginPassword');
+  let btn = document.getElementById('togglePassBtn');
+  if (passInput.type === 'password') {
+    passInput.type = 'text';
+    btn.textContent = '🙈 Sembunyikan';
+  } else {
+    passInput.type = 'password';
+    btn.textContent = '👁️ Lihat';
+  }
+}
 
     function updateLoginLabels() {
       let role = document.getElementById('loginRole').value;
