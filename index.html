@@ -1141,8 +1141,7 @@
         ].join(','));
       });
 
-      let blob = new Blob([csvRows.join('
-')], { type: 'text/csv;charset=utf-8;' });
+      let blob = new Blob([csvRows.join('n')], { type: 'text/csv;charset=utf-8;' });
       let link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.setAttribute('download', `Rekap_SiPosHidro_${currentUserSession.island}.csv`);
