@@ -619,30 +619,31 @@
     let globalReportsData = [];
     let globalVerifikatorMap = {};
 
-    async function callApi(action, params = {}, method = 'GET', bodyData = null) {
-      let url = `${WEB_APP_URL}?action=${action}`;
-      for (let key in params) {
-        url += `&${key}=${encodeURIComponent(params[key])}`;
-      }
+  async function callApi(action, params = {}, method = 'GET', bodyData = null) {
+  let url = `${WEB_APP_URL}?action=${action}`;
+  for (let key in params) {
+    url += `&${key}=${encodeURIComponent(params[key])}`;
+  }
 
-      let options = { 
-  method: method,
-  redirect: 'follow' // <-- TAMBAHKAN BARIS INI
-};
-      if (method === 'POST' && bodyData) {
-        options.body = JSON.stringify(bodyData);
-        options.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
-      }
+  let options = { 
+    method: method,
+    redirect: 'follow'
+  };
 
-      try {
-        let response = await fetch(url, options);
-        let result = await response.json();
-        return result;
-      } catch (err) {
-        console.error("API Error:", err);
-        return { success: false, message: "Koneksi ke server gagal: " + err };
-      }
-    }
+  if (method === 'POST' && bodyData) {
+    options.body = JSON.stringify(bodyData);
+    options.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
+  }
+
+  try {
+    let response = await fetch(url, options);
+    let result = await response.json();
+    return result;
+  } catch (err) {
+    console.error("API Error:", err);
+    return { success: false, message: "Koneksi ke server gagal: " + err };
+  }
+}
 
     function togglePasswordVisibility() {
       let passInput = document.getElementById('loginPassword');
