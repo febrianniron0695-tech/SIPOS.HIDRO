@@ -627,32 +627,28 @@
     let globalReportsData = [];
     let globalVerifikatorMap = {};
 
-    async function callApi(action, params = {}, method = 'GET', bodyData = null) {
-      let url = `${WEB_APP_URL}?action=${action}`;
-      for (let key in params) {
-        url += `&${key}=${encodeURIComponent(params[key])}`;
-      }
+    async function callApi(action, params = {}, method = 'POST', bodyData = null) {
+  let options = {
+    method: 'POST',
+    body: JSON.stringify({ action: action, ...params, ...(bodyData || {}) })
+  };
 
-      let options = { method: method };
-      if (method === 'POST' && bodyData) {
-        options.body = JSON.stringify(bodyData);
-        options.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
-      }
-
-      try {
-        let response = await fetch(url, options);
-        let result = await response.json();
-        return result;
-      } catch (err) {
-        console.error("API Error:", err);
-        return { success: false, message: "Koneksi ke server gagal: " + err };
-      }
+  try {
+    let response = await fetch(WEB_APP_URL, options);
+    let text = await response.text();
+    
+    try {
+      let json = JSON.parse(text);
+      return json;
+    } catch (e) {
+      console.error("Respons Mentah Server:", text);
+      throw new Error("Server mengembalikan HTML/Redirect. Pastikan Web App disetel ke 'Anyone'.");
     }
-
-    function togglePasswordVisibility() {
-      let passInput = document.getElementById('loginPassword');
-      let btn = document.getElementById('togglePassBtn');
-      if (passInput.type === 'password') {
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+}
         passInput.type = 'text';
         btn.textContent = '🙈 Sembunyi';
       } else {
