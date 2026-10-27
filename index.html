@@ -1352,5 +1352,49 @@ function togglePasswordVisibility() {
     initLoginDropdown();
   }
 });
-</body>
+if (res.success) { alert(res.message); loadAdminData(); }
+    else { alert(res.message); }
+  }
+}
+
+// === TEMPEL DI SINI (BARIS 1355) ===
+async function initLoginDropdown() {
+  let islandEl = document.getElementById('loginIsland');
+  let island = islandEl ? islandEl.value : 'Pulau Timor';
+  let roleEl = document.getElementById('loginRole');
+  let role = roleEl ? roleEl.value : 'Petugas / Observer Lapangan';
+
+  let selectStasiun = document.getElementById('loginStation') || document.getElementById('loginUsername');
+  if (!selectStasiun) return;
+
+  selectStasiun.innerHTML = '<option value="">-- Memuat daftar... --</option>';
+
+  try {
+    let res = await callApi('getUserList', { role: role, island: island });
+    selectStasiun.innerHTML = '';
+    
+    if (res && res.success && res.data && res.data.length > 0) {
+      res.data.forEach(item => {
+        let opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = item;
+        selectStasiun.appendChild(opt);
+      });
+    } else {
+      let opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = 'Tidak ada data ditemukan di ' + island;
+      selectStasiun.appendChild(opt);
+    }
+  } catch (err) {
+    console.error("Error initLoginDropdown:", err);
+    selectStasiun.innerHTML = '<option value="">Gagal memuat data</option>';
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof initLoginDropdown === 'function') {
+    initLoginDropdown();
+  }
+});</body>
 </html>
