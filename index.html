@@ -1347,8 +1347,10 @@ function togglePasswordVisibility() {
         let res = await callApi('deleteMultipleReports', {}, 'POST', { rowIndices: rowIndices, islandName: currentIsland });
         if (res.success) { alert(res.message); loadAdminData(); }
         else { alert(res.message); }
-      }
-    }
-  </script>
+     document.addEventListener("DOMContentLoaded", function() {
+  if (typeof initLoginDropdown === 'function') {
+    initLoginDropdown();
+  }
+});
 </body>
 </html>
